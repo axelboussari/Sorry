@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pour toi, mon amour</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --night: #1a2744;
+    --night-soft: #2a3a5c;
+    --blush: #e8b4b8;
+    --blush-soft: #f3d9db;
+    --cream: #faf6f0;
+    --gold: #c9a05c;
+    --ink: #2c2a35;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  html{ scroll-behavior: smooth; }
+
+  body{
+    font-family: 'Outfit', sans-serif;
+    background: var(--night);
+    color: var(--cream);
+    overflow-x: hidden;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+  }
+
+  a, button{ font-family: inherit; }
+
+  /* ---------- SKY / CELESTIAL SIGNATURE ---------- */
+  .sky{
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background: linear-gradient(180deg, #0f1830 0%, #1a2744 35%, #2a3a5c 70%, #3d4f73 100%);
+    transition: background 1.2s ease;
+  }
+  .sky.dawn{
+    background: linear-gradient(180deg, #2a3a5c 0%, #5a5478 30%, #c9a05c 65%, #e8b4b8 100%);
+  }
+
+  .stars{
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(2px 2px at 20% 30%, #fff, transparent),
+      radial-gradient(2px 2px at 60% 70%, #fff, transparent),
+      radial-gradient(1px 1px at 80% 20%, #fff, transparent),
+      radial-gradient(1px 1px at 30% 80%, #fff, transparent),
+      radial-gradient(2px 2px at 90% 50%, #fff, transparent),
+      radial-gradient(1px 1px at 45% 15%, #fff, transparent),
+      radial-gradient(1px 1px at 70% 90%, #fff, transparent);
+    background-repeat: repeat;
+    opacity: 0.6;
+    transition: opacity 1.2s ease;
+  }
+  .stars.fade{ opacity: 0; }
+
+  .celestial-wrap{
+    position: absolute;
+    top: 12vh;
+    left: 50%;
+    width: 90px;
+    height: 90px;
+    transform: translateX(-50%);
+    transition: top 0.1s linear;
+  }
+
+  .moon{
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #fdfbf6, #d8d4c8 70%);
+    box-shadow: 0 0 40px 10px rgba(253,251,246,0.35);
+    opacity: 1;
+    transition: opacity 1s ease, box-shadow 1s ease;
+  }
+  .moon::before, .moon::after, .moon .crater3{
+    content:'';
+    position:absolute;
+    border-radius:50%;
+    background: rgba(180,176,160,0.45);
+  }
+  .moon::before{ width:14px; height:14px; top:20px; left:18px; }
+  .moon::after{ width:9px; height:9px; top:50px; left:55px; }
+
+  .sun{
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: radial-gradient(circle at 40% 40%, #fff6e0, var(--gold) 75%);
+    opacity: 0;
+    box-shadow: 0 0 60px 20px rgba(201,160,92,0.5);
+    transition: opacity 1s ease;
+  }
+  .sun.show{ opacity: 1; }
+
+  /* ---------- LAYOUT ---------- */
+  .content{
+    position: relative;
+    z-index: 1;
+  }
+
+  section{
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 8vh 7vw;
+  }
+
+  .eyebrow{
+    font-size: 0.78rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--blush);
+    margin-bottom: 1.4rem;
+    opacity: 0.85;
+  }
+
+  h1{
+    font-family: 'Playfair Display', serif;
+    font-weight: 500;
+    font-size: clamp(2.1rem, 7vw, 3.6rem);
+    line-height: 1.15;
+    max-width: 14ch;
+    color: var(--cream);
+  }
+
+  h1 em{
+    font-style: italic;
+    color: var(--blush);
+  }
+
+  h2{
+    font-family: 'Playfair Display', serif;
+    font-weight: 500;
+    font-style: italic;
+    font-size: clamp(1.5rem, 5vw, 2.4rem);
+    line-height: 1.3;
+    max-width: 18ch;
+    margin-bottom: 1.6rem;
+  }
+
+  p{
+    font-size: clamp(1.02rem, 2.6vw, 1.18rem);
+    line-height: 1.85;
+    max-width: 34ch;
+    font-weight: 300;
+    color: #ece7dd;
+  }
+
+  .signature-line{
+    margin-top: 2.8rem;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.3rem;
+    color: var(--blush);
+  }
+
+  .scroll-hint{
+    position: absolute;
+    bottom: 6vh;
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--blush-soft);
+    opacity: 0.7;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .scroll-hint .arrow{
+    width: 1px;
+    height: 28px;
+    background: linear-gradient(180deg, var(--blush), transparent);
+    animation: pulse-arrow 2s ease-in-out infinite;
+  }
+  @keyframes pulse-arrow{
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+  }
+
+  .divider{
+    width: 48px;
+    height: 1px;
+    background: var(--gold);
+    margin: 2.2rem 0;
+    opacity: 0.6;
+  }
+
+  /* card-ish text block for the apology section */
+  .apology-block p{
+    margin-bottom: 1.3rem;
+  }
+  .apology-block p:last-child{ margin-bottom: 0; }
+
+  /* healing section */
+  .heal-icon{
+    font-size: 2.2rem;
+    margin-bottom: 1.6rem;
+    filter: drop-shadow(0 0 12px rgba(201,160,92,0.5));
+  }
+
+  .final-card{
+    background: rgba(250,246,240,0.06);
+    border: 1px solid rgba(232,180,184,0.25);
+    border-radius: 18px;
+    padding: clamp(2.2rem, 6vw, 3.4rem) clamp(1.6rem, 6vw, 3rem);
+    backdrop-filter: blur(6px);
+    max-width: 480px;
+  }
+
+  .heart-row{
+    display:flex;
+    gap: 0.5rem;
+    margin-top: 2rem;
+    font-size: 1.3rem;
+    color: var(--blush);
+    opacity: 0.85;
+  }
+
+  footer{
+    padding: 4vh 0 6vh;
+    text-align: center;
+    font-size: 0.75rem;
+    color: rgba(250,246,240,0.4);
+    letter-spacing: 0.05em;
+  }
+
+  @media (max-width: 480px){
+    .celestial-wrap{ width: 64px; height: 64px; top: 9vh; }
+  }
+
+  /* ---------- SOUND TOGGLE ---------- */
+  .sound-toggle{
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    background: rgba(250,246,240,0.1);
+    border: 1px solid rgba(232,180,184,0.35);
+    border-radius: 999px;
+    padding: 0.55rem 1.1rem;
+    color: var(--cream);
+    cursor: pointer;
+    backdrop-filter: blur(6px);
+    transition: background 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+  }
+  .sound-toggle:hover{ background: rgba(250,246,240,0.18); transform: translateY(-1px); }
+  .sound-toggle:focus-visible{ outline: 2px solid var(--blush); outline-offset: 2px; }
+  .sound-toggle .sound-icon{
+    font-size: 1rem;
+    color: var(--blush);
+    transition: transform 0.3s ease;
+  }
+  .sound-toggle[aria-pressed="true"] .sound-icon{
+    animation: sound-pulse 1.6s ease-in-out infinite;
+  }
+  .sound-toggle .sound-label{
+    font-size: 0.78rem;
+    letter-spacing: 0.05em;
+  }
+  @keyframes sound-pulse{
+    0%, 100% { transform: scale(1); opacity: 0.85; }
+    50% { transform: scale(1.25); opacity: 1; }
+  }
+
+  /* expiry screen */
+  .expired-screen{
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    background: var(--night);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 8vw;
+  }
+  .expired-screen h1{
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: clamp(1.6rem, 6vw, 2.4rem);
+    color: var(--blush);
+    margin-bottom: 1rem;
+  }
+  .expired-screen p{
+    color: #ece7dd;
+    font-weight: 300;
+  }
+</style>
+</head>
+<body>
+
+<div class="sky" id="sky">
+  <div class="stars" id="stars"></div>
+  <div class="celestial-wrap" id="celestialWrap">
+    <div class="moon" id="moon"></div>
+    <div class="sun" id="sun"></div>
+  </div>
+</div>
+
+<button id="soundToggle" class="sound-toggle" aria-label="Activer le son" aria-pressed="false">
+  <span class="sound-icon">♪</span>
+  <span class="sound-label">Son</span>
+</button>
+
+<div class="content">
+
+  <section>
+    <p class="eyebrow">Une lettre pour toi</p>
+    <h1>Avant tout, je suis <em>désolé.</em></h1>
+    <p style="margin-top:1.6rem;">Et avant que tu continues à lire, je veux que tu saches : ceci n'est pas une excuse rapide. C'est ce que j'ai sur le cœur.</p>
+    <div class="scroll-hint">
+      <span>Continue</span>
+      <span class="arrow"></span>
+    </div>
+  </section>
+
+  <section>
+    <p class="eyebrow">Ce que j'ai compris</p>
+    <h2>Tu portais déjà beaucoup,<br>et j'ai ajouté du poids.</h2>
+    <div class="apology-block">
+      <p>Ces derniers temps, au lieu d'être un endroit où tu pouvais juste respirer, j'ai mis de la pression alors que tu traversais déjà des choses difficiles de ton côté.</p>
+      <p>Tu n'avais pas besoin de ça. Tu avais besoin d'espace, de patience, et de quelqu'un qui comprend sans exiger.</p>
+    </div>
+  </section>
+
+  <section>
+    <p class="eyebrow">Ce que je veux que tu saches</p>
+    <h2>J'ai été minable,<br>et je le reconnais.</h2>
+    <div class="apology-block">
+      <p>Je me suis comporté d'une façon qui ne t'a pas aidée, et je m'en veux sincèrement. Tu méritais mieux de ma part, surtout dans un moment où tu en avais déjà plein les bras.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="heal-icon">☾ ⟶ ☼</div>
+    <p class="eyebrow">Pour ta guérison</p>
+    <h2>Repose-toi.<br>Je suis là, autrement.</h2>
+    <p>Prends le temps qu'il te faut. Pas de pression, pas d'attentes — juste moi qui t'envoie toute la douceur possible, par-delà la distance.</p>
+    <p style="margin-top:1rem;">Je te souhaite bonne guérison, chérie, et que tu reviennes deux fois plus forte ❤️</p>
+  </section>
+
+  <section>
+    <div class="final-card">
+      <p class="eyebrow" style="margin-bottom:1rem;">Pour finir</p>
+      <h2 style="margin-bottom:1.2rem;">Je t'aime,<br>et je fais mieux à partir d'aujourd'hui.</h2>
+      <p style="margin:0 auto;">Bonne guérison, mon amour. Je pense à toi plus que tu ne le crois.</p>
+      <div class="heart-row">♡ ♡ ♡</div>
+      <p class="signature-line">— Toujours à toi</p>
+    </div>
+  </section>
+
+  <footer>fait avec tout mon cœur, depuis loin mais jamais distant</footer>
+
+</div>
+
+<script>
+  const sky = document.getElementById('sky');
+  const stars = document.getElementById('stars');
+  const moon = document.getElementById('moon');
+  const sun = document.getElementById('sun');
+  const wrap = document.getElementById('celestialWrap');
+
+  /* ---------- EXPIRATION : la page se bloque 7 jours après le premier visionnage ---------- */
+  (function checkExpiry(){
+    const STORAGE_KEY = 'pour-toi-first-visit';
+    const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
+    let firstVisit = localStorage.getItem(STORAGE_KEY);
+
+    if(!firstVisit){
+      firstVisit = Date.now().toString();
+      localStorage.setItem(STORAGE_KEY, firstVisit);
+    }
+
+    const elapsed = Date.now() - parseInt(firstVisit, 10);
+
+    if(elapsed > SEVEN_DAYS_MS){
+      document.body.innerHTML = `
+        <div class="expired-screen">
+          <h1>Ce moment nous appartient déjà.</h1>
+          <p>Cette page n'était que pour un instant — mais ce que je ressens, lui, ne s'efface pas.</p>
+        </div>`;
+      document.body.style.background = '#1a2744';
+      throw new Error('Page expired');
+    }
+  })();
+
+  function onScroll(){
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = Math.min(Math.max(window.scrollY / docHeight, 0), 1);
+
+    // moon -> sun transition starting at 55% scroll
+    const transitionStart = 0.5;
+    const t = Math.min(Math.max((progress - transitionStart) / (1 - transitionStart), 0), 1);
+
+    moon.style.opacity = 1 - t;
+    if(t > 0.05){ sun.classList.add('show'); sun.style.opacity = t; } else { sun.classList.remove('show'); }
+
+    if(t > 0.3){ sky.classList.add('dawn'); stars.classList.add('fade'); }
+    else { sky.classList.remove('dawn'); stars.classList.remove('fade'); }
+
+    // celestial body rises slightly as we scroll
+    const top = 12 - (progress * 4);
+    wrap.style.top = top + 'vh';
+  }
+
+  window.addEventListener('scroll', onScroll, { passive:true });
+  onScroll();
+
+  /* ---------- AUDIO : mélodie de piano romantique en boucle ---------- */
+  let audioCtx = null;
+  let ambianceState = null;
+  let soundOn = false;
+
+  function initAudioContext(){
+    if(!audioCtx){
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    return audioCtx.state === 'suspended' ? audioCtx.resume() : Promise.resolve();
+  }
+
+  // Notes (Hz) — Ré majeur, registre médium/aigu pour la mélodie
+  const N = {
+    D4: 293.66, E4: 329.63, FS4: 369.99, G4: 392.00, A4: 440.00, B4: 493.88, CS5: 554.37,
+    D5: 587.33, E5: 659.25, FS5: 739.99, G5: 783.99, A5: 880.00,
+    A3: 220.00, B3: 246.94, D3: 146.83, FS3: 184.99, G3: 196.00, E3: 164.81
+  };
+
+  // Mélodie tendre, phrase qui monte puis se résout doucement — chaque entrée : [note, durée en temps (1 temps = NOTE_UNIT)]
+  const MELODY = [
+    [N.A4, 2], [N.FS4, 1], [N.G4, 1], [N.A4, 2], [N.D5, 2],
+    [N.CS5, 1], [N.B4, 1], [N.A4, 2], [N.FS4, 2],
+    [N.G4, 2], [N.A4, 1], [N.B4, 1], [N.A4, 2], [N.FS4, 2],
+    [N.E4, 2], [N.FS4, 1], [N.G4, 1], [N.E4, 2], [N.D4, 4],
+  ];
+
+  // Accompagnement en accords étalés, en registre grave/médium, sous la mélodie
+  const ACCOMPANIMENT_CHORDS = [
+    [N.D3, N.A3, N.D4],   // Ré majeur
+    [N.B3, N.FS3, N.D4],  // Si mineur (couleur)
+    [N.G3, N.D3, N.G4],   // Sol majeur
+    [N.A3, N.E4, N.A4],   // La majeur
+  ];
+
+  const NOTE_UNIT = 0.62; // durée d'un temps, en secondes — tempo lent et rêveur
+
+  function pianoNote(freq, startTime, duration, peakGain, outputNode, voicesArray){
+    // timbre "piano" approximatif : fondamentale + harmoniques qui s'éteignent vite + enveloppe percussive
+    const partials = [
+      { mult: 1,    gain: 1.0  },
+      { mult: 2,    gain: 0.35 },
+      { mult: 3,    gain: 0.12 },
+      { mult: 4.2,  gain: 0.06 },
+    ];
+    partials.forEach(p => {
+      const osc = audioCtx.createOscillator();
+      osc.type = 'sine';
+      osc.frequency.value = freq * p.mult;
+
+      const g = audioCtx.createGain();
+      const peak = peakGain * p.gain;
+      g.gain.setValueAtTime(0.0001, startTime);
+      g.gain.linearRampToValueAtTime(peak, startTime + 0.018);            // attaque rapide (frappe du marteau)
+      g.gain.exponentialRampToValueAtTime(peak * 0.35, startTime + 0.18); // déclin initial rapide
+      g.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);  // résonance qui s'éteint
+
+      osc.connect(g);
+      g.connect(outputNode);
+      osc.start(startTime);
+      osc.stop(startTime + duration + 0.05);
+      voicesArray.push(osc);
+    });
+  }
+
+  function startAmbiance(){
+    if(ambianceState) return;
+
+    const masterGain = audioCtx.createGain();
+    masterGain.gain.value = 0.0001;
+
+    // filtre passe-bas doux pour un timbre chaud, type piano feutré
+    const filter = audioCtx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.value = 2600;
+    filter.Q.value = 0.2;
+
+    // réverbération légère (écho doux) pour donner de la profondeur, comme une grande salle
+    const delay = audioCtx.createDelay();
+    delay.delayTime.value = 0.32;
+    const delayGain = audioCtx.createGain();
+    delayGain.gain.value = 0.22;
+    const delayFeedback = audioCtx.createGain();
+    delayFeedback.gain.value = 0.28;
+
+    masterGain.connect(filter);
+    filter.connect(audioCtx.destination);
+    filter.connect(delay);
+    delay.connect(delayFeedback);
+    delayFeedback.connect(delay);
+    delay.connect(delayGain);
+    delayGain.connect(audioCtx.destination);
+
+    masterGain.gain.linearRampToValueAtTime(1, audioCtx.currentTime + 1.5);
+
+    const activeVoices = [];
+    ambianceState = { masterGain, filter, delay, delayGain, delayFeedback, activeVoices, loopTimeout: null, stopped: false };
+
+    function scheduleLoop(){
+      if(!ambianceState || ambianceState.stopped) return;
+      const loopStart = audioCtx.currentTime + 0.05;
+      let t = loopStart;
+
+      // mélodie principale, voix douce
+      MELODY.forEach(([freq, beats]) => {
+        const dur = beats * NOTE_UNIT;
+        pianoNote(freq, t, dur * 1.5, 0.16, masterGain, activeVoices);
+        t += dur;
+      });
+
+      // accompagnement en accords étalés, en dessous, plus discret — joué une fois au début de chaque groupe de 4 temps
+      let accT = loopStart;
+      const totalBeats = MELODY.reduce((s, [, b]) => s + b, 0);
+      const chordDuration = (totalBeats / ACCOMPANIMENT_CHORDS.length) * NOTE_UNIT;
+      ACCOMPANIMENT_CHORDS.forEach(chord => {
+        chord.forEach(freq => pianoNote(freq, accT, chordDuration * 1.3, 0.05, masterGain, activeVoices));
+        accT += chordDuration;
+      });
+
+      const loopDuration = totalBeats * NOTE_UNIT;
+      ambianceState.loopTimeout = setTimeout(scheduleLoop, loopDuration * 1000);
+    }
+
+    scheduleLoop();
+  }
+
+  function stopAmbiance(){
+    if(!ambianceState) return;
+    ambianceState.stopped = true;
+    const { masterGain, activeVoices, loopTimeout } = ambianceState;
+    clearTimeout(loopTimeout);
+    masterGain.gain.cancelScheduledValues(audioCtx.currentTime);
+    masterGain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.8);
+    setTimeout(() => {
+      activeVoices.forEach(osc => { try{ osc.stop(); }catch(e){} });
+    }, 900);
+    ambianceState = null;
+  }
+
+  const soundToggle = document.getElementById('soundToggle');
+  soundToggle.addEventListener('click', async () => {
+    soundOn = !soundOn;
+    soundToggle.setAttribute('aria-pressed', soundOn.toString());
+    soundToggle.setAttribute('aria-label', soundOn ? 'Désactiver le son' : 'Activer le son');
+    soundToggle.querySelector('.sound-label').textContent = soundOn ? 'Son activé' : 'Son';
+
+    if(soundOn){
+      await initAudioContext();
+      startAmbiance();
+    } else {
+      stopAmbiance();
+    }
+  });
+</script>
+
+</body>
+</html>
